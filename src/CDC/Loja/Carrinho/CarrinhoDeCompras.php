@@ -1,50 +1,41 @@
 <?php
-
 namespace CDC\Loja\Carrinho;
-
 use CDC\Loja\Produto\Produto;
 use ArrayObject;
-
 class CarrinhoDeCompras
 {
     private $produtos;
-
+    /**
+     * @codeCoverageIgnore
+     */
     public function __construct()
     {
         $this->produtos = new ArrayObject();
     }
-
     public function adiciona(Produto $produto)
     {
-
         $this->produtos->append($produto);
         return $this;
     }
-
     public function getProdutos()
     {
         return $this->produtos;
     }
-
     public function maiorValor()
     {
-        if(count($this->getItens()) == 0) {
-
+        if (count($this->getProdutos()) === 0) {
+            
             return 0;
-
         }
 
-        $maiorValor = $this->getProdutos()[0]->getValor();
+        $maiorValor = $this->getProdutos()[0]->getValorUnitario();
 
-        foreach($this->getProdutos() as $produto) {
+        foreach ($this->getProdutos() as $produto) {
+            if ($maiorValor < $produto->getValorUnitario()) {
 
-            if($maiorValor < $produto->getValor()) {
-
-                $maiorValor = $produto->getValor();
+                $maiorValor = $produto->getValorUnitario();
             }
-
         }
-
         return $maiorValor;
     }
 }
